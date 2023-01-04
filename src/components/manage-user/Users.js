@@ -40,7 +40,6 @@ const Users = () => {
   }, [currentPage]);
   useEffect(() => {
     if (!checkRoleUsers) navigate("/");
-    console.log(checkRoleUsers);
   }, [checkRoleUsers]);
   const handlePageClick = async (event) => {
     setCurrentPage(event.selected + 1);

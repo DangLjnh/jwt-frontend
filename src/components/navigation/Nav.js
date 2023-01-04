@@ -10,6 +10,11 @@ import { logoutUser } from "../../services/userService";
 import { toast } from "react-toastify";
 import SearchInput from "../search/SearchPost";
 const NavStyle = styled.div`
+  .icon-react {
+    -webkit-animation: spin 4s linear infinite;
+    -moz-animation: spin 4s linear infinite;
+    animation: spin 4s linear infinite;
+  }
   .nav-link {
     &:hover {
       color: #6bdefc !important;
@@ -19,6 +24,22 @@ const NavStyle = styled.div`
   .nav-link {
     &.active {
       color: #6bdefc !important;
+    }
+  }
+  @-moz-keyframes spin {
+    100% {
+      -moz-transform: rotate(360deg);
+    }
+  }
+  @-webkit-keyframes spin {
+    100% {
+      -webkit-transform: rotate(360deg);
+    }
+  }
+  @keyframes spin {
+    100% {
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg);
     }
   }
 `;
@@ -48,7 +69,11 @@ const NavHeader = () => {
     <NavStyle>
       <Navbar bg="light" expand="lg">
         <Container>
-          <Navbar.Brand onClick={() => navigate("/")}>
+          <Navbar.Brand
+            className="icon-react"
+            onClick={() => navigate("/")}
+            style={{ cursor: `${location.pathname === "/" ? "" : "pointer"}` }}
+          >
             <img src="../../../logo192.png" alt="" width={40} height={40} />
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />

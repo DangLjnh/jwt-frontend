@@ -8,6 +8,9 @@ const RegisterStyle = styled.div`
   min-height: 100vh;
   .brand {
     h2 {
+      background: linear-gradient(90deg, #262443 0, #2a99d5);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
       span {
         font-weight: 600;
       }

@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { v4 } from "uuid";
 import { deletePost, getAllPost } from "../../services/postService";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
+import { UserContext } from "../../context/UserContext";
 const TablePostStyle = styled.div`
   .post-detail {
     img {
@@ -20,6 +21,8 @@ const TablePostStyle = styled.div`
 `;
 const TablePost = () => {
   const [postList, setPostList] = useState([]);
+  const leader = 1;
+  const { user } = useContext(UserContext);
   const navigate = useNavigate();
   const fetchAllPost = async () => {
     const res = await getAllPost();
@@ -30,29 +33,34 @@ const TablePost = () => {
     }
   };
   const handleDeleteUser = async (post) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        Swal.fire("Deleted!", "Your file has been deleted.", "success");
-        const res = await deletePost({
-          postID: post.postID,
-          publicID: post.publicID,
-        });
-        if (+res.EC === 0) {
-          toast.success(res.EM);
-          await fetchAllPost();
-        } else {
-          toast.error(res.EM);
+    if (
+      +user?.account?.groupID === leader ||
+      user?.account.id === post.User.userID
+    ) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          Swal.fire("Deleted!", "Your file has been deleted.", "success");
+          const res = await deletePost({
+            postID: post.postID,
+            publicID: post.publicID,
+          });
+          if (+res.EC === 0) {
+            toast.success(res.EM);
+            await fetchAllPost();
+          } else {
+            toast.error(res.EM);
+          }
         }
-      }
-    });
+      });
+    }
   };
   useEffect(() => {
     fetchAllPost();
@@ -95,7 +103,7 @@ const TablePost = () => {
                   <td className="">
                     <div className="gap-2 d-flex align-items-center justify-content-center">
                       <svg
-                        style={{ cursor: "pointer" }}
+                        style={{ cursor: `pointer` }}
                         width="30"
                         onClick={() => navigate(`/post/detail/${post.slug}`)}
                         height="30"
@@ -119,9 +127,27 @@ const TablePost = () => {
                         />
                       </svg>
                       <svg
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: `${
+                            +user?.account?.groupID === leader
+                              ? "pointer"
+                              : +user?.account.id === +post.User.userID
+                              ? "pointer"
+                              : "context-menu"
+                          }`,
+                        }}
                         width="30"
-                        onClick={() => navigate(`/post/update/${post.slug}`)}
+                        onClick={() =>
+                          navigate(
+                            `${
+                              user?.account?.groupID === leader
+                                ? `/post/update/${post.slug}`
+                                : user?.account.id === post.User.userID
+                                ? `/post/update/${post.slug}`
+                                : `/posts`
+                            }`
+                          )
+                        }
                         height="30"
                         viewBox="0 0 24 24"
                         fill="none"
@@ -176,7 +202,15 @@ const TablePost = () => {
                         />
                       </svg>
                       <svg
-                        style={{ cursor: "pointer" }}
+                        style={{
+                          cursor: `${
+                            +user?.account?.groupID === leader
+                              ? "pointer"
+                              : +user?.account.id === +post.User.userID
+                              ? "pointer"
+                              : "context-menu"
+                          }`,
+                        }}
                         onClick={() => handleDeleteUser(post)}
                         width="30"
                         height="30"

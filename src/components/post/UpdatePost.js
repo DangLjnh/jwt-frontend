@@ -127,7 +127,7 @@ const UpdatePost = () => {
   }, []);
   return (
     <UpdatePostStyle className="container">
-      <h3 className="my-2">Add new posts</h3>
+      <h3 className="my-2">Update post: {_postInfo.name}</h3>
       <div className="add-post">
         <div className="row">
           <div className="my-3 col-12 col-sm-6 form-group">

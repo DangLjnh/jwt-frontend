@@ -11,7 +11,7 @@ const FooterStyle = styled.footer`
 const Footer = () => {
   return (
     <FooterStyle className="mt-3 text-center bg-light text-lg-star">
-      <div class="p-3 text-center">
+      <div className="p-3 text-center">
         <p className="text-dark">© 2022 Copyright: Dang Linh</p>
       </div>
     </FooterStyle>

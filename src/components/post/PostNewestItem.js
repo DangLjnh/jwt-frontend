@@ -42,7 +42,9 @@ const PostNewestItem = ({ post }) => {
         <img src={post.photoURL} alt="unsplash" />
       </div>
       <div className="post-content">
-        <PostCategory type="secondary">{post.Category.name}</PostCategory>
+        <PostCategory category={post.Category} type="secondary">
+          {post.Category.name}
+        </PostCategory>
         <PostTitle>{post.name}</PostTitle>
         <PostMeta createdAt postInfo={post}></PostMeta>
       </div>
